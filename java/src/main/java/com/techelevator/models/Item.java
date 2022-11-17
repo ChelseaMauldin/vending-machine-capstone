@@ -14,7 +14,9 @@ public abstract class Item {
         this.price = price;
 
     }
-    public abstract void getMessage();
+    public abstract String getMessage();
+
+    public abstract String getType();
 
     public String getSlot() {
         return slot;
