@@ -57,19 +57,19 @@ public class VendingMachine
     public void run()
     {
         Map<String, Item> inventory = restockInventory();
+        UserOutput.displayHomeScreen();
         while(true)
         {
-            UserOutput.displayHomeScreen();
             String choice = UserInput.getHomeScreenOption();
 
             if(choice.equals("display"))
             {
                 UserOutput.displaySlots(inventory);
-                //Choose an item or insert cash
+
             }
             else if(choice.equals("purchase"))
             {
-                // make a purchase
+                UserInput.purchase(inventory);
             }
             else if(choice.equals("exit"))
             {

@@ -41,9 +41,24 @@ public class UserOutput
             //A1: U-Chews (Gum)  Price: $1.65
             System.out.println(slotName.getValue().getSlot() + ": " + slotName.getValue().getName() + " (" + slotName.getValue().getType() + "), Price: $" + slotName.getValue().getPrice());
         }
-
-
+        System.out.println("");
     }
+
+    public static void displayBills() {
+        System.out.println();
+        System.out.println("Please select one of the following options and insert the corresponding bill: ");
+        System.out.println("1 - insert $1 bill");
+        System.out.println("2 - insert $5 bill");
+        System.out.println("3 - insert $10 bill");
+        System.out.println("4 - insert $20 bill");
+        System.out.println("E - exit to menu");
+    }
+
+
+
+
+
+
 
 
 }

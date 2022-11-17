@@ -1,6 +1,9 @@
 package com.techelevator.ui;
 
+import com.techelevator.models.Item;
+
 import java.math.BigDecimal;
+import java.util.Map;
 import java.util.Scanner;
 
 /**
@@ -11,6 +14,7 @@ import java.util.Scanner;
 public class UserInput
 {
     private static Scanner scanner = new Scanner(System.in);
+    private static BigDecimal userMoney = new BigDecimal("0.00");
 
     public static String getHomeScreenOption()
     {
@@ -44,6 +48,71 @@ public class UserInput
             return "";
         }
 
+    }
+
+    public static void purchase(Map<String, Item> inventory){
+        System.out.println("What would you like to do?");
+        System.out.println();
+
+        System.out.println("I) Insert money");
+        System.out.println("S) Select item");
+        System.out.println("F) Finish transaction");
+
+        System.out.println();
+        System.out.print("Please select an option: ");
+
+        String selectedOption = scanner.nextLine();
+        String option = selectedOption.trim().toUpperCase();
+
+        if (option.equals("I"))
+        {
+            insert();
+        }
+        else if (option.equals("S"))
+        {
+            UserInput.select(inventory);
+        }
+        else if (option.equals("F"))
+        {
+            // return "finish";
+        }
+        else
+        {
+            // return "";
+        }
+    }
+
+    public static void insert() {
+        String option = "";
+        while (option != "E"){
+            System.out.println("Insert bill here ($1, $5, $10, $20 only), or press E and exit to menu");
+            UserOutput.displayBills();
+            option = scanner.nextLine();
+            if (option.equals("1")) {
+                userMoney = userMoney.add(new BigDecimal("1.00"));
+            }
+            if (option.equals("2")) {
+                userMoney = userMoney.add(new BigDecimal("5.00"));
+            }
+            if (option.equals("3")) {
+                userMoney = userMoney.add(new BigDecimal("10.00"));
+            }
+            if (option.equals("4")) {
+                userMoney = userMoney.add(new BigDecimal("20.00"));
+            }
+            else {
+                break;
+            }
+        }
+    }
+
+    public static void select(Map<String, Item> inventory) {
+        System.out.println("Please enter the slot identifier of the item you would like: ");
+        String slotNumber = scanner.nextLine();
+        if (inventory.containsKey(slotNumber)) {
+            inventory.get(slotNumber).vend();
+            System.out.println("Vending" + inventory.get(slotNumber).getName());
+        }
     }
 
     

@@ -29,4 +29,14 @@ public abstract class Item {
     public BigDecimal getPrice() {
         return price;
     }
+
+    public void vend() {
+        if (stock < 1) {
+            System.out.println("This item is out of stock, please make another selection");
+        }
+       else {
+           this.stock--;
+        }
+    }
+
 }
