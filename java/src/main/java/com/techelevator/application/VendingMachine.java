@@ -74,6 +74,7 @@ public class VendingMachine
             else if(choice.equals("exit"))
             {
                 // good bye
+                UserOutput.exit();
                 break;
             }
         }

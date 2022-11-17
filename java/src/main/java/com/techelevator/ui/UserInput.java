@@ -90,18 +90,25 @@ public class UserInput
             option = scanner.nextLine();
             if (option.equals("1")) {
                 userMoney = userMoney.add(new BigDecimal("1.00"));
+                System.out.println("You have inserted a $1 bill. Your total is now $" + userMoney);
             }
-            if (option.equals("2")) {
+           else if (option.equals("5")) {
                 userMoney = userMoney.add(new BigDecimal("5.00"));
+                System.out.println("You have inserted a $5 bill. Your total is now $" + userMoney);
             }
-            if (option.equals("3")) {
+            else if (option.equals("10")) {
                 userMoney = userMoney.add(new BigDecimal("10.00"));
+                System.out.println("You have inserted a $10 bill. Your total is now $" + userMoney);
             }
-            if (option.equals("4")) {
+           else if (option.equals("20")) {
                 userMoney = userMoney.add(new BigDecimal("20.00"));
+                System.out.println("You have inserted a $20 bill. Your total is now $" + userMoney);
+            }
+            else if (option.equalsIgnoreCase("E")){
+                break;
             }
             else {
-                break;
+                System.out.println("Invalid entry, please try again");
             }
         }
     }
@@ -110,8 +117,18 @@ public class UserInput
         System.out.println("Please enter the slot identifier of the item you would like: ");
         String slotNumber = scanner.nextLine();
         if (inventory.containsKey(slotNumber)) {
-            inventory.get(slotNumber).vend();
-            System.out.println("Vending" + inventory.get(slotNumber).getName());
+            if (userMoney.compareTo(inventory.get(slotNumber).getPrice()) >= 0) {
+                inventory.get(slotNumber).vend();
+                System.out.println("Vending" + inventory.get(slotNumber).getName());
+                userMoney = userMoney.subtract(inventory.get(slotNumber).getPrice());
+                System.out.println("You have $" + userMoney + " remaining");
+            }
+            else {
+                System.out.println("You do not have enough funds for that selection. Please insert more money.");
+            }
+        }
+        else {
+            System.out.println("No item found, please try again.");
         }
     }
 

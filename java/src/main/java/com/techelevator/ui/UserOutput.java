@@ -47,11 +47,14 @@ public class UserOutput
     public static void displayBills() {
         System.out.println();
         System.out.println("Please select one of the following options and insert the corresponding bill: ");
-        System.out.println("1 - insert $1 bill");
-        System.out.println("2 - insert $5 bill");
-        System.out.println("3 - insert $10 bill");
-        System.out.println("4 - insert $20 bill");
-        System.out.println("E - exit to menu");
+        System.out.println("1) - insert $1 bill");
+        System.out.println("5) - insert $5 bill");
+        System.out.println("10) - insert $10 bill");
+        System.out.println("20) - insert $20 bill");
+        System.out.println("E) - exit to menu");
+    }
+    public static void exit(){
+        System.out.println("Thank you for using our vending machine. ooey gooey");
     }
 
 
