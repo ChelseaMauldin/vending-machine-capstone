@@ -119,12 +119,14 @@ public class UserInput {
                         System.out.println("This item is out of stock, please make another selection");
                     } else {
                         if (purchaseNumber % 2 == 0) {
+                            auditVendItem(inventory, slotNumber);
                             System.out.println("Vending: " + inventory.get(slotNumber).getName() + " for $" + (inventory.get(slotNumber).getPrice()).subtract(DISCOUNT) + " (BOGODO DISCOUNT - $1 Off!)");
                             userMoney = userMoney.subtract(inventory.get(slotNumber).getPrice().subtract(DISCOUNT));
                             System.out.println(inventory.get(slotNumber).getMessage());
                             System.out.println("You have $" + userMoney + " remaining");
                             purchaseNumber++;
                         } else {
+                            auditVendItem(inventory, slotNumber);
                             System.out.println("Vending: " + inventory.get(slotNumber).getName() + " for $" + inventory.get(slotNumber).getPrice());
                             userMoney = userMoney.subtract(inventory.get(slotNumber).getPrice());
                             System.out.println(inventory.get(slotNumber).getMessage());
@@ -144,6 +146,7 @@ public class UserInput {
     }
 
     public static void getChange() {
+        auditChangeBack();
         BigDecimal userTotal = new BigDecimal(String.valueOf(userMoney));
         final BigDecimal DOLLAR = new BigDecimal("1.00");
         int dollarCount = 0;
@@ -183,21 +186,41 @@ public class UserInput {
 
     public static void auditFeedMoney(BigDecimal bill, BigDecimal total) {
         try (FileWriter audit = new FileWriter("audit.txt", true); BufferedWriter printer = new BufferedWriter(audit)) {
-            DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
+            DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy/MM/dd hh:mm:ss a");
             LocalDateTime now = LocalDateTime.now();
             bill = total.subtract(bill);
-            printer.write(dateFormat.format(now) + " MONEY FED:     $" + bill + " $" + total);
+            printer.write(dateFormat.format(now) + " MONEY FED:     $" + bill + " $" + total + "\n");
         } catch (Exception e) {
             System.out.println("No such file");
         }
     }
+    public static void auditVendItem(Map<String, Item> inventory, String slotNumber) {
+        try (FileWriter audit = new FileWriter("audit.txt", true);
+             BufferedWriter printer = new BufferedWriter(audit)) {
+            DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy/MM/dd hh:mm:ss a");
+            LocalDateTime now = LocalDateTime.now();
 
-    public static void auditVendItem() {
 
+            printer.write(dateFormat.format(now) + " " + inventory.get(slotNumber).getName() + "         " + inventory.get(slotNumber).getSlot() + " $" + userMoney + " $" + userMoney.subtract(inventory.get(slotNumber).getPrice()) + "\n");
+        } catch (Exception e) {
+            System.out.println("Error - no file found");
+        }
     }
+
+
+
 
     public static void auditChangeBack() {
+        try (FileWriter audit = new FileWriter("audit.txt", true);
+             BufferedWriter printer = new BufferedWriter(audit)) {
+            DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy/MM/dd hh:mm:ss a");
+            LocalDateTime now = LocalDateTime.now();
 
+
+            printer.write(dateFormat.format(now) + " CHANGE GIVEN:        $" + userMoney + " $" + userMoney.subtract(userMoney) + "\n");
+
+        }catch (Exception e) {
+            System.out.println("Error - no file found");
+        }
     }
-
 }
