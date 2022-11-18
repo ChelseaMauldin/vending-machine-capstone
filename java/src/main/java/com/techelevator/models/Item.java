@@ -3,10 +3,12 @@ package com.techelevator.models;
 import java.math.BigDecimal;
 
 public abstract class Item {
+    private final int MAX_STOCK = 6;
     private String slot;
     private String name;
     private BigDecimal price;
-    private int stock = 6;
+    private int stock = MAX_STOCK;
+    private boolean outOfStock = false;
 
     public Item(String slot, String name, BigDecimal price) {
         this.slot = slot;
@@ -32,11 +34,15 @@ public abstract class Item {
 
     public void vend() {
         if (stock < 1) {
-            System.out.println("This item is out of stock, please make another selection");
+            outOfStock = true;
+
         }
        else {
            this.stock--;
         }
     }
 
+    public boolean isOutOfStock() {
+        return outOfStock;
+    }
 }

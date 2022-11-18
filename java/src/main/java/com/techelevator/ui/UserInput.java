@@ -2,6 +2,7 @@ package com.techelevator.ui;
 
 import com.techelevator.models.Item;
 
+import java.awt.image.ShortLookupTable;
 import java.math.BigDecimal;
 import java.util.Map;
 import java.util.Scanner;
@@ -15,6 +16,8 @@ public class UserInput
 {
     private static Scanner scanner = new Scanner(System.in);
     private static BigDecimal userMoney = new BigDecimal("0.00");
+    private static int purchaseNumber = 1;
+    private static final BigDecimal DISCOUNT = new BigDecimal("1.00");
 
     public static String getHomeScreenOption()
     {
@@ -51,10 +54,11 @@ public class UserInput
     }
 
     public static void purchase(Map<String, Item> inventory){
+        while(true) {
         System.out.println("What would you like to do?");
         System.out.println();
 
-        System.out.println("I) Insert money");
+        System.out.println("M) Insert Money");
         System.out.println("S) Select item");
         System.out.println("F) Finish transaction");
 
@@ -64,7 +68,7 @@ public class UserInput
         String selectedOption = scanner.nextLine();
         String option = selectedOption.trim().toUpperCase();
 
-        if (option.equals("I"))
+        if (option.equals("M"))
         {
             insert();
         }
@@ -74,13 +78,14 @@ public class UserInput
         }
         else if (option.equals("F"))
         {
-            // return "finish";
+            getChange();
+            break;
         }
         else
         {
-            // return "";
+            System.out.println("Invalid entry, please try again!");
         }
-    }
+    }}
 
     public static void insert() {
         String option = "";
@@ -114,22 +119,80 @@ public class UserInput
     }
 
     public static void select(Map<String, Item> inventory) {
-        System.out.println("Please enter the slot identifier of the item you would like: ");
+        UserOutput.displaySlots(inventory);
+        while(true){
+        System.out.println("Please enter the slot identifier of the item you would like, or press [E] to exit: ");
         String slotNumber = scanner.nextLine();
         if (inventory.containsKey(slotNumber)) {
             if (userMoney.compareTo(inventory.get(slotNumber).getPrice()) >= 0) {
                 inventory.get(slotNumber).vend();
-                System.out.println("Vending" + inventory.get(slotNumber).getName());
+                if (inventory.get(slotNumber).isOutOfStock()) {
+                    System.out.println("This item is out of stock, please make another selection");
+                } else {
+                    if (purchaseNumber % 2 == 0) {
+                        System.out.println("Vending: " + inventory.get(slotNumber).getName() + " for $" + (inventory.get(slotNumber).getPrice()).subtract(DISCOUNT) + " (BOGODO DISCOUNT - $1 Off!)");
+                        userMoney = userMoney.subtract(inventory.get(slotNumber).getPrice().subtract(DISCOUNT));
+                        System.out.println(inventory.get(slotNumber).getMessage());
+                        System.out.println("You have $" + userMoney + " remaining");
+                        purchaseNumber++;
+                    } else {
+                System.out.println("Vending: " + inventory.get(slotNumber).getName() + " for $" + inventory.get(slotNumber).getPrice());
                 userMoney = userMoney.subtract(inventory.get(slotNumber).getPrice());
+                System.out.println(inventory.get(slotNumber).getMessage());
                 System.out.println("You have $" + userMoney + " remaining");
-            }
+                purchaseNumber++;
+            }}}
             else {
                 System.out.println("You do not have enough funds for that selection. Please insert more money.");
             }
+        } else if (slotNumber.equalsIgnoreCase("e")) {
+            break;
         }
         else {
             System.out.println("No item found, please try again.");
         }
+    }
+    }
+
+    public static void getChange(){
+        BigDecimal userTotal = new BigDecimal(String.valueOf(userMoney));
+        final BigDecimal DOLLAR = new BigDecimal("1.00");
+        int dollarCount = 0;
+        final BigDecimal QUARTER = new BigDecimal("0.25");
+        int quarterCount = 0;
+        final BigDecimal DIME = new BigDecimal("0.10");
+        int dimeCount = 0;
+        final BigDecimal NICKEL = new BigDecimal("0.05");
+        int nickelCount = 0;
+
+        while (userMoney.compareTo(DOLLAR) >= 0) {
+            userMoney = userMoney.subtract(DOLLAR);
+            dollarCount++;
+        }
+        while (userMoney.compareTo(QUARTER) >= 0) {
+            userMoney = userMoney.subtract(QUARTER);
+            quarterCount++;
+        }
+        while (userMoney.compareTo(DIME) >= 0) {
+            userMoney = userMoney.subtract(DIME);
+            dimeCount++;
+        }
+        while (userMoney.compareTo(NICKEL) >= 0) {
+            userMoney = userMoney.subtract(NICKEL);
+            nickelCount++;
+        }
+        purchaseNumber = 1; //reset the discount counter
+        System.out.println();
+        System.out.println("Thank you for your purchases!");
+        System.out.println("Now vending $" + userTotal);
+        System.out.println("Dispensing " + dollarCount + " dollars, " + quarterCount + " quarters, " + dimeCount + " dimes, and " + nickelCount + " nickels.");
+        System.out.println("Have a great day!");
+        System.out.println();
+
+
+
+
+
     }
 
     
